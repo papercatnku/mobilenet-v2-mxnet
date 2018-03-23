@@ -16,7 +16,7 @@ def mobilenet_unit(data, num_filter=1, kernel=(1, 1), stride=(1, 1), pad=(0, 0),
         num_group=num_group,
         stride=stride,
         pad=pad,
-        # no_bias=True,
+        no_bias=True,
         name='%s-conv2d'%prefix)
     bn = mx.sym.BatchNorm(data=conv, name='%s-batchnorm'%prefix, fix_gamma=True)
     if if_act:
