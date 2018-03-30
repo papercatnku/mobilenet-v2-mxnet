@@ -3,32 +3,6 @@ import mxnet.ndarray as nd
 import mxnet.gluon as gluon
 import mxnet.gluon.nn as nn
 import mxnet.autograd as ag
-# recursive convolution block
-class RecurConvBlock(nn.HybridBlock):
-    def __init__(self, untied_c, tied_c, recur_n=3, **kwargs):
-        super(RecurConvBlock, self).__init__(**kwargs)
-        with self.name_scope():
-            self.untied_conv = nn.Conv2D(
-            channels=untied_c,
-            kernel_size=3,
-            strides=(1,1),
-            padding=(1,1)
-            )
-            self.tied_conv = nn.Conv2D(
-                channels=tied_c,
-                kernel_size=3,
-                strides=(1,1),
-                padding=(1,1)
-            )
-        self.recur_n = recur_n
-        return
-        
-    def hybrid_forward(self, F, x):
-        out =F.relu(self.untied_conv(x))
-        for _ in range(self.recur_n):
-            out = F.relu(self.tied_conv(out))
-        return out
-
 # Used for mobienet structure
 def ConvBlock(channels, kernel, stride, pad):
     out = nn.HybridSequential()
@@ -136,7 +110,7 @@ class InvResiSeq(nn.HybridBlock):
         out = self.seq(x)
         return out
 
-def getMnetV2(first_conv_param, last_conv_param, inv_resi_params_ls, num_classes=1000):
+def getMnetV2(first_conv_param, last_conv_param, inv_resi_params_ls, num_classes=1000, **):
     net = nn.HybridSequential(prefix='mnet-stem-')
     # first conv
     first_conv = ConvBlock(**first_conv_param)
