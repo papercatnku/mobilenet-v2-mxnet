@@ -53,13 +53,13 @@ class InvertedResidual(nn.HybridBlock):
                 DWise(num_filter_in*expansion_factor, kernel, self.stride, pad),
                 Conv1x1(num_filter_out, is_linear=True)
             )
-            if self.stride == 1 and not self.same_shape:
+            if (self.stride == 1 or self.stride == (1,1)) and not self.same_shape:
                 self.conv_res = Conv1x1(num_filter_out)
     def hybrid_forward(self, F, x):
         out = self.bottleneck(x)
         #if self.stride == 1 and self.same_shape:
         #    out = F.elemwise_add(out, x)
-        if self.stride == 1:
+        if self.stride == 1 or self.stride == (1,1):
             if not self.same_shape:
                 x = self.conv_res(x)
             out = F.elemwise_add(out, x)
