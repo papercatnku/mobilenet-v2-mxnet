@@ -110,7 +110,7 @@ class InvResiSeq(nn.HybridBlock):
         out = self.seq(x)
         return out
 
-def getMnetV2(first_conv_param, last_conv_param, inv_resi_params_ls, num_classes=1000, **):
+def getMnetV2(first_conv_param, last_conv_param, inv_resi_params_ls, num_classes=1000):
     net = nn.HybridSequential(prefix='mnet-stem-')
     # first conv
     first_conv = ConvBlock(**first_conv_param)
@@ -224,3 +224,4 @@ if __name__ == '__main__':
     
     sym = net(mx.sym.Variable('data'))
     mx.viz.plot_network(symbol=net(mx.sym.Variable('data')),shape={'data':(1,3,224,224)}).view()
+    
